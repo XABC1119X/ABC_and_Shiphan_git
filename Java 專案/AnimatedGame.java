@@ -28,9 +28,34 @@ public class AnimatedGame {
     private JButton[] magicCards = new JButton[4];
     private Timer heroAttackTimer, monsterAttackTimer, manaRegenTimer, monsterUltimateTimer;
 
+    // 人像圖案
+    private ImageIcon heroPortrait, monsterPortrait;
+
     public AnimatedGame() {
-        setupGameWindow();
-        startTimers();
+        showStartMenu();
+    }
+
+    // 顯示開始選單
+    private void showStartMenu() {
+        frame = new JFrame("Java 遊戲專案");
+        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        frame.setSize(800, 600);
+        frame.setLayout(new BorderLayout());
+
+        JLabel titleLabel = new JLabel("歡迎來到地下城", SwingConstants.CENTER);
+        titleLabel.setFont(new Font("Arial", Font.BOLD, 30));
+        frame.add(titleLabel, BorderLayout.NORTH);
+
+        JButton startButton = new JButton("開始遊戲");
+        startButton.setFont(new Font("Arial", Font.BOLD, 20));
+        startButton.addActionListener(e -> {
+            frame.dispose();
+            setupGameWindow();
+            startTimers();
+        });
+
+        frame.add(startButton, BorderLayout.CENTER);
+        frame.setVisible(true);
     }
 
     // 初始化遊戲視窗
@@ -40,14 +65,17 @@ public class AnimatedGame {
         frame.setSize(800, 600);
         frame.setLayout(null);
 
-        // 主角與怪物圖像
-        heroLabel = new JLabel("🦸‍♂️");
-        heroLabel.setFont(new Font("Arial", Font.PLAIN, 50));
-        heroLabel.setBounds(100, 250, 50, 50);
+        // 載入人像
+        heroPortrait = new ImageIcon("hero.png"); // 替換為實際的檔案路徑
+        monsterPortrait = new ImageIcon("C:\\Users\\User.DESKTOP-DD1LPJ8\\Desktop\\程式\\ABC_and_Shiphan_git\\Java 專案\\picture\\hero.png"); // 替換為實際的檔案路徑
 
-        monsterLabel = new JLabel("👾");
-        monsterLabel.setFont(new Font("Arial", Font.PLAIN, 50));
-        monsterLabel.setBounds(600, 250, 50, 50);
+        // 主角人像
+        heroLabel = new JLabel(heroPortrait);
+        heroLabel.setBounds(50, 200, 100, 100);
+
+        // 怪物人像
+        monsterLabel = new JLabel(monsterPortrait);
+        monsterLabel.setBounds(650, 200, 100, 100);
 
         frame.add(heroLabel);
         frame.add(monsterLabel);
@@ -91,11 +119,11 @@ public class AnimatedGame {
     // 啟動各項定時器
     private void startTimers() {
         // 主角自動攻擊怪物
-        heroAttackTimer = new Timer(heroAttackSpeed, e -> animateAttack(heroLabel, monsterLabel, () -> attackMonster()));
+        heroAttackTimer = new Timer(heroAttackSpeed, e -> attackMonster());
         heroAttackTimer.start();
 
         // 怪物自動攻擊主角
-        monsterAttackTimer = new Timer(monsterAttackSpeed, e -> animateAttack(monsterLabel, heroLabel, () -> attackHero()));
+        monsterAttackTimer = new Timer(monsterAttackSpeed, e -> attackHero());
         monsterAttackTimer.start();
 
         // 怪物大招攻擊
@@ -108,23 +136,6 @@ public class AnimatedGame {
 
         // 初始生成魔法卡
         generateMagicCards();
-    }
-
-    // 動畫攻擊
-    private void animateAttack(JLabel attacker, JLabel target, Runnable onHit) {
-        Timer animationTimer = new Timer(50, null);
-        int[] dx = {10};
-        animationTimer.addActionListener(e -> {
-            int attackerX = attacker.getX();
-            if (Math.abs(attackerX - target.getX()) > 50) {
-                attacker.setLocation(attackerX + dx[0], attacker.getY());
-            } else {
-                animationTimer.stop();
-                attacker.setLocation(attackerX - dx[0], attacker.getY());
-                onHit.run();
-            }
-        });
-        animationTimer.start();
     }
 
     // 主角攻擊怪物
