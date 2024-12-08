@@ -29,7 +29,7 @@ public class AnimatedGame {
     private Timer heroAttackTimer, monsterAttackTimer, manaRegenTimer, monsterUltimateTimer;
 
     // 人像圖案
-    private ImageIcon heroPortrait, monsterPortrait;
+    private ImageIcon heroPortrait, monsterPortrait,GGPortrait ,DEFPortrait ,AttackPortrait;
 
     public AnimatedGame() {
         showStartMenu();
@@ -66,16 +66,19 @@ public class AnimatedGame {
         frame.setLayout(null);
 
         // 載入人像
-        heroPortrait = new ImageIcon("hero.png"); // 替換為實際的檔案路徑
-        monsterPortrait = new ImageIcon("C:\\Users\\User.DESKTOP-DD1LPJ8\\Desktop\\程式\\ABC_and_Shiphan_git\\Java 專案\\picture\\hero.png"); // 替換為實際的檔案路徑
+        heroPortrait = new ImageIcon("Java 專案\\picture\\hero.png");
+        monsterPortrait = new ImageIcon("Java 專案\\picture\\monster.png"); 
+        GGPortrait = new ImageIcon("Java 專案\\picture\\GGgirl.png"); 
+        DEFPortrait = new ImageIcon("Java 專案\\picture\\DEF.png"); 
+        AttackPortrait = new ImageIcon("Java 專案\\picture\\attack.png"); 
 
         // 主角人像
         heroLabel = new JLabel(heroPortrait);
-        heroLabel.setBounds(50, 200, 100, 100);
+        heroLabel.setBounds(50, 130, 200, 250);
 
         // 怪物人像
         monsterLabel = new JLabel(monsterPortrait);
-        monsterLabel.setBounds(650, 200, 100, 100);
+        monsterLabel.setBounds(450, 200, 250, 200);
 
         frame.add(heroLabel);
         frame.add(monsterLabel);
