@@ -74,7 +74,7 @@ public class AnimatedGame {
 
         // 主角人像
         heroLabel = new JLabel(heroPortrait);
-        heroLabel.setBounds(50, 130, 200, 250);
+        heroLabel.setBounds(50, 130, 250, 250);
 
         // 怪物人像
         monsterLabel = new JLabel(monsterPortrait);
@@ -140,15 +140,33 @@ public class AnimatedGame {
         // 初始生成魔法卡
         generateMagicCards();
     }
+    private void moveHero(int deltaX) {
+        Point position = heroLabel.getLocation();
+        heroLabel.setLocation(position.x + deltaX, position.y);
+    }
 
     // 主角攻擊怪物
     private void attackMonster() {
         if (monsterHealth > 0) {
-            monsterHealth -= heroAttackPower;
-            updateLabels();
-            if (monsterHealth <= 0) {
-                gameEnd("主角勝利！");
-            }
+            // 動畫效果：更換圖片與移動
+            SwingUtilities.invokeLater(() -> {
+                heroLabel.setIcon(AttackPortrait); // 更換為攻擊圖片
+                moveHero(30); // 向前移動
+            });
+    
+            // 短暫延遲後恢復圖片與位置
+            Timer resetTimer = new Timer(500, e -> {
+                heroLabel.setIcon(heroPortrait); // 恢復靜止圖片
+                moveHero(-30); // 移回原位
+                // 扣除怪物血量
+                monsterHealth -= heroAttackPower;
+                updateLabels();
+                if (monsterHealth <= 0) {
+                    gameEnd("主角勝利！");
+                }
+            });
+            resetTimer.setRepeats(false);
+            resetTimer.start();
         }
     }
 
@@ -181,6 +199,10 @@ public class AnimatedGame {
                 heroHealth -= monsterUltimatePower;
                 updateLabels();
                 if (heroHealth <= 0) {
+                    SwingUtilities.invokeLater(() -> {
+                        heroLabel.setIcon(GGPortrait); 
+                        moveHero(30); // 向前移動
+                    });
                     gameEnd("怪物勝利！");
                 }
             }
@@ -235,6 +257,10 @@ public class AnimatedGame {
                         break;
                     case "防禦":
                         isDefenseActive = true;
+                        SwingUtilities.invokeLater(() -> {
+                            heroLabel.setIcon(DEFPortrait); 
+                            moveHero(30); // 向前移動
+                        });
                         break;
                     case "血量 +20":
                         heroHealth = Math.min(heroMaxHealth, heroHealth + 20);
