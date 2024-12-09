@@ -66,11 +66,11 @@ public class AnimatedGame {
         frame.setLayout(null);
 
         // 載入人像
-        heroPortrait = new ImageIcon("Java 專案\\picture\\hero.png");
-        monsterPortrait = new ImageIcon("Java 專案\\picture\\monster.png"); 
-        GGPortrait = new ImageIcon("Java 專案\\picture\\GGgirl.png"); 
-        DEFPortrait = new ImageIcon("Java 專案\\picture\\DEF.png"); 
-        AttackPortrait = new ImageIcon("Java 專案\\picture\\attack.png"); 
+        heroPortrait = new ImageIcon("ABC_and_Shiphan_git\\Java 專案\\picture\\hero.png");
+        monsterPortrait = new ImageIcon("ABC_and_Shiphan_git\\Java 專案\\picture\\monster.png"); 
+        GGPortrait = new ImageIcon("ABC_and_Shiphan_git\\Java 專案\\picture\\GGgirl.png"); 
+        DEFPortrait = new ImageIcon("ABC_and_Shiphan_git\\Java 專案\\picture\\DEF.png"); 
+        AttackPortrait = new ImageIcon("ABC_and_Shiphan_git\\\\Java 專案\\picture\\attack.png"); 
 
         // 主角人像
         heroLabel = new JLabel(heroPortrait);
