@@ -83,7 +83,7 @@ public class AnimatedGame {
         // 怪物血量進度條
         monsterHealthBar = new JProgressBar(0, monsterHealth); // 設定最大值
         monsterHealthBar.setValue(monsterHealth); // 設定初始值
-        monsterHealthBar.setBounds(450, 180, 250, 20); // 設定位置與大小
+        monsterHealthBar.setBounds(450, 100, 250, 20); // 設定位置與大小
         monsterHealthBar.setStringPainted(true); // 顯示文字
         monsterHealthBar.setForeground(Color.RED); // 設定顏色
         frame.add(monsterHealthBar);
@@ -104,7 +104,7 @@ public class AnimatedGame {
 
         // 怪物人像
         monsterLabel = new JLabel(monsterPortrait);
-        monsterLabel.setBounds(450, 200, 250, 200);
+        monsterLabel.setBounds(450, 100, 300, 350);
 
         frame.add(heroLabel);
         frame.add(monsterLabel);
@@ -282,13 +282,35 @@ public class AnimatedGame {
             return;
         }
     
+        // 更新關卡相關數據
         level++;
         monsterHealth = 50 + level * 10; // 每關怪物血量增加
         monsterAttackPower += 2; // 每關攻擊力增加
         monsterAttackSpeed = Math.max(2000, monsterAttackSpeed - 200); // 攻擊速度加快
         monsterUltimatePower += 5; // 大招傷害增加
-        
+    
+        // 停止計時器，等待玩家按確定後啟動下一關
+        if (heroAttackTimer != null) heroAttackTimer.stop();
+        if (monsterAttackTimer != null) monsterAttackTimer.stop();
+        if (monsterUltimateTimer != null) monsterUltimateTimer.stop();
+        if (manaRegenTimer != null) manaRegenTimer.stop();
+    
+        // 顯示訊息，等待按下確認後繼續
         JOptionPane.showMessageDialog(frame, "恭喜！進入第 " + level + " 關！");
+        
+        // 更新怪物圖片
+        if (level == 2) {
+            monsterLabel.setIcon(new ImageIcon("ABC_and_Shiphan_git\\Java 專案\\picture\\monster_level2.png"));
+        } else if (level == 3) {
+            monsterLabel.setIcon(new ImageIcon("ABC_and_Shiphan_git\\Java 專案\\picture\\monster_level3.png"));
+        }
+    
+        // 重置怪物進度條和狀態
+        monsterHealthBar.setMaximum(monsterHealth);
+        monsterHealthBar.setValue(monsterHealth);
+    
+        // 重新啟動計時器
+        startTimers();
         updateLabels();
     }
     
@@ -301,7 +323,7 @@ public class AnimatedGame {
         int monsterHealthPercent = (int) ((double) monsterHealth / (50 + level * 20) * 100); // 根據等級調整最大值
         monsterHealthBar.setForeground(monsterHealthPercent > 50 ? Color.RED : (monsterHealthPercent > 20 ? Color.ORANGE : Color.DARK_GRAY));
     }
-    
+
     // 更新數值顯示
     private void updateLabels() {
         heroStatsLabel.setText("主角 - 血量: " + heroHealth + "/" + heroMaxHealth + ", 攻擊力: " + heroAttackPower);
