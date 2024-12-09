@@ -42,11 +42,11 @@ public class AnimatedGame {
         frame.setSize(800, 600);
         frame.setLayout(new BorderLayout());
 
-        JLabel titleLabel = new JLabel("歡迎來到地下城", SwingConstants.CENTER);
+        JLabel titleLabel = new JLabel("Welcome to the dungeon", SwingConstants.CENTER);
         titleLabel.setFont(new Font("Arial", Font.BOLD, 30));
         frame.add(titleLabel, BorderLayout.NORTH);
 
-        JButton startButton = new JButton("開始遊戲");
+        JButton startButton = new JButton("Game Start");
         startButton.setFont(new Font("Arial", Font.BOLD, 20));
         startButton.addActionListener(e -> {
             frame.dispose();
@@ -60,7 +60,7 @@ public class AnimatedGame {
 
     // 初始化遊戲視窗
     private void setupGameWindow() {
-        frame = new JFrame("Java Swing 動畫遊戲");
+        frame = new JFrame("Java 遊戲專案");
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.setSize(800, 600);
         frame.setLayout(null);
@@ -70,7 +70,7 @@ public class AnimatedGame {
         monsterPortrait = new ImageIcon("ABC_and_Shiphan_git\\Java 專案\\picture\\monster.png"); 
         GGPortrait = new ImageIcon("ABC_and_Shiphan_git\\Java 專案\\picture\\GGgirl.png"); 
         DEFPortrait = new ImageIcon("ABC_and_Shiphan_git\\Java 專案\\picture\\DEF.png"); 
-        AttackPortrait = new ImageIcon("ABC_and_Shiphan_git\\\\Java 專案\\picture\\attack.png"); 
+        AttackPortrait = new ImageIcon("ABC_and_Shiphan_git\\Java 專案\\picture\\attack.png"); 
 
         // 主角人像
         heroLabel = new JLabel(heroPortrait);
