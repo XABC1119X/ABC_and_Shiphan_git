@@ -140,9 +140,14 @@ public class AnimatedGame {
         // 初始生成魔法卡
         generateMagicCards();
     }
+    // move
     private void moveHero(int deltaX) {
         Point position = heroLabel.getLocation();
         heroLabel.setLocation(position.x + deltaX, position.y);
+    }
+    private void moveMonster(int deltaX) {
+        Point position = monsterLabel.getLocation();
+        monsterLabel.setLocation(position.x + deltaX, position.y);
     }
 
     // 主角攻擊怪物
@@ -151,13 +156,13 @@ public class AnimatedGame {
             // 動畫效果：更換圖片與移動
             SwingUtilities.invokeLater(() -> {
                 heroLabel.setIcon(AttackPortrait); // 更換為攻擊圖片
-                moveHero(30); // 向前移動
+                moveHero(150); // 向前移動
             });
     
             // 短暫延遲後恢復圖片與位置
             Timer resetTimer = new Timer(500, e -> {
                 heroLabel.setIcon(heroPortrait); // 恢復靜止圖片
-                moveHero(-30); // 移回原位
+                moveHero(-150); // 移回原位
                 // 扣除怪物血量
                 monsterHealth -= heroAttackPower;
                 updateLabels();
@@ -176,11 +181,20 @@ public class AnimatedGame {
             JOptionPane.showMessageDialog(frame, "防禦成功！主角免疫本次傷害！");
             isDefenseActive = false;
         } else if (heroHealth > 0) {
-            heroHealth -= monsterAttackPower;
-            updateLabels();
-            if (heroHealth <= 0) {
-                gameEnd("怪物勝利！");
-            }
+            moveMonster(-80); // 向前移動
+            Timer resetTimer = new Timer(500, e -> {
+                monsterLabel.setIcon(monsterPortrait); // 恢復靜止圖片
+                moveMonster(80); // 移回原位
+                // 扣除怪物血量
+                heroHealth -= monsterAttackPower;
+                updateLabels();
+                if (heroHealth <= 0) {
+                    gameEnd("怪物勝利！");
+                }
+            });
+            resetTimer.setRepeats(false);
+            resetTimer.start();
+            
         }
     }
 
