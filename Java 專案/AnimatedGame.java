@@ -17,8 +17,7 @@ public class AnimatedGame {
     private int heroAttackSpeed = 3000; // 毫秒
     private int heroMana = 0;
     private final int heroMaxMana = 100;
-    
-    
+
     // 怪物數值
     private int monsterAttackPower = 5;
     private int monsterHealth = 50;
