@@ -6,6 +6,9 @@ import javax.swing.*;
 
 
 public class AnimatedGame {
+    
+    // 動作判定
+    private boolean isDefenseActive = false;
 
     // 主角數值
     private int heroAttackPower = 3;
@@ -14,8 +17,8 @@ public class AnimatedGame {
     private int heroAttackSpeed = 3000; // 毫秒
     private int heroMana = 0;
     private final int heroMaxMana = 100;
-    private boolean isDefenseActive = false;
-
+    
+    
     // 怪物數值
     private int monsterAttackPower = 5;
     private int monsterHealth = 50;
