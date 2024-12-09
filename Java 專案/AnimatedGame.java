@@ -247,12 +247,13 @@ public class AnimatedGame {
 
     // 遊戲結束
     private void gameEnd(String message) {
-        JOptionPane.showMessageDialog(frame, message);
+        
         if (heroAttackTimer != null) heroAttackTimer.stop();
         if (monsterAttackTimer != null) monsterAttackTimer.stop();
         if (manaRegenTimer != null) manaRegenTimer.stop();
         if (monsterUltimateTimer != null) monsterUltimateTimer.stop();
-        System.exit(0);
+        JOptionPane.showMessageDialog(frame, message);
+        System.exit(1);
     }
 
     // 隨機生成魔法卡
