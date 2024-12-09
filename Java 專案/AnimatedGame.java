@@ -25,18 +25,20 @@ public class AnimatedGame {
     private int monsterAttackSpeed = 5000; // 毫秒
     private int monsterUltimateInterval = 20000; // 毫秒
 
+    // 人像圖案
+        private ImageIcon heroPortrait, monsterPortrait,GGPortrait ,DEFPortrait ,AttackPortrait;
+
+        public AnimatedGame() {
+            showStartMenu();
+        }
+        
     // 遊戲視窗
     private JFrame frame;
     private JLabel heroLabel, monsterLabel, heroStatsLabel, monsterStatsLabel, manaLabel, ultimateWarningLabel;
     private JButton[] magicCards = new JButton[4];
     private Timer heroAttackTimer, monsterAttackTimer, manaRegenTimer, monsterUltimateTimer;
 
-    // 人像圖案
-    private ImageIcon heroPortrait, monsterPortrait,GGPortrait ,DEFPortrait ,AttackPortrait;
-
-    public AnimatedGame() {
-        showStartMenu();
-    }
+    
 
     // 顯示開始選單
     private void showStartMenu() {
