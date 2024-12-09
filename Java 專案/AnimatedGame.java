@@ -10,9 +10,11 @@ public class AnimatedGame {
     // 動作判定
     private boolean isDefenseActive = false;
     private boolean isGameOver = false;
+    private int level = 1;
+    private final int maxLevel = 3;
 
     // 主角數值
-    private int heroAttackPower = 3;
+    private int heroAttackPower = 30;
     private int heroHealth = 100;
     private int heroMaxHealth = 100;
     private int heroAttackSpeed = 3000; // 毫秒
@@ -38,6 +40,7 @@ public class AnimatedGame {
     private JLabel heroLabel, monsterLabel, heroStatsLabel, monsterStatsLabel, manaLabel, ultimateWarningLabel;
     private JButton[] magicCards = new JButton[4];
     private Timer heroAttackTimer, monsterAttackTimer, manaRegenTimer, monsterUltimateTimer;
+    private JProgressBar heroHealthBar, monsterHealthBar;
 
     // 顯示開始選單
     private void showStartMenu() {
@@ -68,6 +71,24 @@ public class AnimatedGame {
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.setSize(800, 600);
         frame.setLayout(null);
+
+        // 主角血量進度條
+        heroHealthBar = new JProgressBar(0, heroMaxHealth); // 設定最大值
+        heroHealthBar.setValue(heroHealth); // 設定初始值
+        heroHealthBar.setBounds(50, 100, 250, 20); // 設定位置與大小
+        heroHealthBar.setStringPainted(true); // 顯示文字
+        heroHealthBar.setForeground(Color.GREEN); // 設定顏色
+        frame.add(heroHealthBar);
+
+        // 怪物血量進度條
+        monsterHealthBar = new JProgressBar(0, monsterHealth); // 設定最大值
+        monsterHealthBar.setValue(monsterHealth); // 設定初始值
+        monsterHealthBar.setBounds(450, 180, 250, 20); // 設定位置與大小
+        monsterHealthBar.setStringPainted(true); // 顯示文字
+        monsterHealthBar.setForeground(Color.RED); // 設定顏色
+        frame.add(monsterHealthBar);
+
+        
 
         // 載入人像
         heroPortrait = new ImageIcon("ABC_and_Shiphan_git\\Java 專案\\picture\\hero.png");
@@ -176,10 +197,14 @@ public class AnimatedGame {
                 updateLabels();
                 if (monsterHealth <= 0) {
                     SwingUtilities.invokeLater(() -> {
-                        monsterLabel.setIcon(GGmonsterPortrait); 
-                        moveMonster(30); // 向前移動
+                    monsterLabel.setIcon(GGmonsterPortrait); 
+                    moveMonster(30); // 向前移動
                     });
-                    gameEnd("主角勝利！");
+                    if (level < maxLevel) {
+                        nextLevel();
+                    } else {
+                        gameEnd("恭喜！你通關了所有關卡！");
+                    }
                 }
             });
             resetTimer.setRepeats(false);
@@ -250,12 +275,45 @@ public class AnimatedGame {
             manaLabel.setText("魔力值: " + heroMana + "/" + heroMaxMana);
         }
     }
-
+   
+    private void nextLevel() {
+        if (level >= maxLevel) {
+            gameEnd("恭喜！你通關了所有關卡！");
+            return;
+        }
+    
+        level++;
+        monsterHealth = 50 + level * 10; // 每關怪物血量增加
+        monsterAttackPower += 2; // 每關攻擊力增加
+        monsterAttackSpeed = Math.max(2000, monsterAttackSpeed - 200); // 攻擊速度加快
+        monsterUltimatePower += 5; // 大招傷害增加
+        
+        JOptionPane.showMessageDialog(frame, "恭喜！進入第 " + level + " 關！");
+        updateLabels();
+    }
+    
+    private void updateHealthBarColors() {
+        // 主角血量進度條顏色
+        int heroHealthPercent = (int) ((double) heroHealth / heroMaxHealth * 100);
+        heroHealthBar.setForeground(heroHealthPercent > 50 ? Color.GREEN : (heroHealthPercent > 20 ? Color.ORANGE : Color.RED));
+    
+        // 怪物血量進度條顏色
+        int monsterHealthPercent = (int) ((double) monsterHealth / (50 + level * 20) * 100); // 根據等級調整最大值
+        monsterHealthBar.setForeground(monsterHealthPercent > 50 ? Color.RED : (monsterHealthPercent > 20 ? Color.ORANGE : Color.DARK_GRAY));
+    }
+    
     // 更新數值顯示
     private void updateLabels() {
         heroStatsLabel.setText("主角 - 血量: " + heroHealth + "/" + heroMaxHealth + ", 攻擊力: " + heroAttackPower);
         monsterStatsLabel.setText("怪物 - 血量: " + monsterHealth + ", 攻擊力: " + monsterAttackPower);
         manaLabel.setText("魔力值: " + heroMana + "/" + heroMaxMana);
+
+        // 更新進度條
+        heroHealthBar.setMaximum(heroMaxHealth); // 更新主角最大血量
+        heroHealthBar.setValue(heroHealth); // 更新主角當前血量
+        monsterHealthBar.setValue(monsterHealth); // 更新怪物當前血量
+
+        updateHealthBarColors();
     }
 
     // 遊戲結束
