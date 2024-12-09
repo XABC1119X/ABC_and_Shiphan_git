@@ -27,7 +27,7 @@ public class AnimatedGame {
     private int monsterUltimateInterval = 20000; // 毫秒
 
     // 人像圖案
-        private ImageIcon heroPortrait, monsterPortrait,GGPortrait ,DEFPortrait ,AttackPortrait;
+        private ImageIcon heroPortrait, monsterPortrait,GGPortrait ,DEFPortrait ,AttackPortrait,GGmonsterPortrait;
 
         public AnimatedGame() {
             showStartMenu();
@@ -75,6 +75,7 @@ public class AnimatedGame {
         GGPortrait = new ImageIcon("ABC_and_Shiphan_git\\Java 專案\\picture\\GGgirl.png"); 
         DEFPortrait = new ImageIcon("ABC_and_Shiphan_git\\Java 專案\\picture\\DEF.png"); 
         AttackPortrait = new ImageIcon("ABC_and_Shiphan_git\\Java 專案\\picture\\attack.png"); 
+        GGmonsterPortrait = new ImageIcon("ABC_and_Shiphan_git\\Java 專案\\picture\\GGmonster.png"); 
 
         // 主角人像
         heroLabel = new JLabel(heroPortrait);
@@ -174,6 +175,10 @@ public class AnimatedGame {
                 monsterHealth -= heroAttackPower;
                 updateLabels();
                 if (monsterHealth <= 0) {
+                    SwingUtilities.invokeLater(() -> {
+                        monsterLabel.setIcon(GGmonsterPortrait); 
+                        moveMonster(30); // 向前移動
+                    });
                     gameEnd("主角勝利！");
                 }
             });
