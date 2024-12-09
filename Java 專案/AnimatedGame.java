@@ -200,6 +200,10 @@ public class AnimatedGame {
                 heroHealth -= monsterAttackPower;
                 updateLabels();
                 if (heroHealth <= 0) {
+                    SwingUtilities.invokeLater(() -> {
+                        heroLabel.setIcon(GGPortrait); 
+                        moveHero(30); // 向前移動
+                    });
                     gameEnd("怪物勝利！");
                 }
             });
