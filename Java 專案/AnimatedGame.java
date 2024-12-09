@@ -108,14 +108,14 @@ public class AnimatedGame {
         // 魔法卡區域
         // 调整按钮面板
         JPanel cardPanel = new JPanel();
-        cardPanel.setLayout(new FlowLayout(FlowLayout.CENTER, 10, 10)); // 使用 FlowLayout，按钮间隔更灵活
-        cardPanel.setBounds(90, 440, 600, 100); // 调整面板位置和尺寸，使其足够容纳按钮
+        cardPanel.setLayout(new FlowLayout(FlowLayout.CENTER, 10, 10)); 
+        cardPanel.setBounds(90, 440, 600, 100); 
         
         for (int i = 0; i < 4; i++) {
             magicCards[i] = new JButton();
-            magicCards[i].setPreferredSize(new Dimension(200, 40)); // 每个按钮的尺寸，宽120，高60
+            magicCards[i].setPreferredSize(new Dimension(200, 40)); 
             magicCards[i].addActionListener(new MagicCardAction());
-            cardPanel.add(magicCards[i]); // 添加按钮到面板
+            cardPanel.add(magicCards[i]); 
         }
 
         frame.add(cardPanel);
@@ -192,7 +192,7 @@ public class AnimatedGame {
             Timer resetTimer = new Timer(500, e -> {
                 monsterLabel.setIcon(monsterPortrait); // 恢復靜止圖片
                 moveMonster(80); // 移回原位
-                // 扣除怪物血量
+                // 扣除主角血量
                 heroHealth -= monsterAttackPower;
                 updateLabels();
                 if (heroHealth <= 0) {
