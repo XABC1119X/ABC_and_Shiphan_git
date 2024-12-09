@@ -9,6 +9,7 @@ public class AnimatedGame {
     
     // 動作判定
     private boolean isDefenseActive = false;
+    private boolean isGameOver = false;
 
     // 主角數值
     private int heroAttackPower = 3;
@@ -145,7 +146,8 @@ public class AnimatedGame {
         // 初始生成魔法卡
         generateMagicCards();
     }
-    // move
+
+    // 移動
     private void moveHero(int deltaX) {
         Point position = heroLabel.getLocation();
         heroLabel.setLocation(position.x + deltaX, position.y);
@@ -157,7 +159,7 @@ public class AnimatedGame {
 
     // 主角攻擊怪物
     private void attackMonster() {
-        if (monsterHealth > 0) {
+        if (monsterHealth > 0 && !isGameOver) {
             // 動畫效果：更換圖片與移動
             SwingUtilities.invokeLater(() -> {
                 heroLabel.setIcon(AttackPortrait); // 更換為攻擊圖片
@@ -189,7 +191,7 @@ public class AnimatedGame {
             JOptionPane.showMessageDialog(frame, "防禦成功！主角免疫本次傷害！");
             isDefenseActive = false;
             }
-        } else if (heroHealth > 0) {
+        } else if (heroHealth > 0 && !isGameOver) {
             moveMonster(-80); // 向前移動
             Timer resetTimer = new Timer(500, e -> {
                 monsterLabel.setIcon(monsterPortrait); // 恢復靜止圖片
@@ -218,7 +220,7 @@ public class AnimatedGame {
                 }
             }
             ultimateWarningLabel.setText("");
-            if (heroHealth > 0) {
+            if (heroHealth > 0 && !isGameOver) {
                 heroHealth -= monsterUltimatePower;
                 updateLabels();
                 if (heroHealth <= 0) {
@@ -249,7 +251,9 @@ public class AnimatedGame {
 
     // 遊戲結束
     private void gameEnd(String message) {
-        
+        if (isGameOver) return; 
+        isGameOver = true;
+
         if (heroAttackTimer != null) heroAttackTimer.stop();
         if (monsterAttackTimer != null) monsterAttackTimer.stop();
         if (manaRegenTimer != null) manaRegenTimer.stop();
