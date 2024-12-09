@@ -202,7 +202,7 @@ public class AnimatedGame {
     private void monsterUltimateAttack() {
         new Thread(() -> {
             for (int i = 3; i > 0; i--) {
-                ultimateWarningLabel.setText("怪物大招倒數: " + i + " 秒！");
+                ultimateWarningLabel.setText("The monster ult attack: " + i + " sec");
                 try {
                     Thread.sleep(1000);
                 } catch (InterruptedException ignored) {
