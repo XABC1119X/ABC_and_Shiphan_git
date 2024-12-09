@@ -4,6 +4,7 @@ import java.awt.event.ActionListener;
 import java.util.Random;
 import javax.swing.*;
 
+
 public class AnimatedGame {
 
     // 主角數值
@@ -18,7 +19,7 @@ public class AnimatedGame {
     // 怪物數值
     private int monsterAttackPower = 5;
     private int monsterHealth = 50;
-    private int monsterUltimatePower = 20;
+    private int monsterUltimatePower = 35;
     private int monsterAttackSpeed = 5000; // 毫秒
     private int monsterUltimateInterval = 20000; // 毫秒
 
@@ -105,14 +106,16 @@ public class AnimatedGame {
         frame.add(ultimateWarningLabel);
 
         // 魔法卡區域
+        // 调整按钮面板
         JPanel cardPanel = new JPanel();
-        cardPanel.setLayout(new GridLayout(1, 4));
-        cardPanel.setBounds(200, 500, 400, 50);
-
+        cardPanel.setLayout(new FlowLayout(FlowLayout.CENTER, 10, 10)); // 使用 FlowLayout，按钮间隔更灵活
+        cardPanel.setBounds(90, 440, 600, 100); // 调整面板位置和尺寸，使其足够容纳按钮
+        
         for (int i = 0; i < 4; i++) {
-            magicCards[i] = new JButton("魔法卡");
+            magicCards[i] = new JButton();
+            magicCards[i].setPreferredSize(new Dimension(200, 40)); // 每个按钮的尺寸，宽120，高60
             magicCards[i].addActionListener(new MagicCardAction());
-            cardPanel.add(magicCards[i]);
+            cardPanel.add(magicCards[i]); // 添加按钮到面板
         }
 
         frame.add(cardPanel);
@@ -178,8 +181,12 @@ public class AnimatedGame {
     // 怪物攻擊主角
     private void attackHero() {
         if (isDefenseActive) {
+            if (heroHealth <= 0) {
+                gameEnd("怪物勝利！");
+            }else{
             JOptionPane.showMessageDialog(frame, "防禦成功！主角免疫本次傷害！");
             isDefenseActive = false;
+            }
         } else if (heroHealth > 0) {
             moveMonster(-80); // 向前移動
             Timer resetTimer = new Timer(500, e -> {
@@ -241,12 +248,16 @@ public class AnimatedGame {
     // 遊戲結束
     private void gameEnd(String message) {
         JOptionPane.showMessageDialog(frame, message);
+        if (heroAttackTimer != null) heroAttackTimer.stop();
+        if (monsterAttackTimer != null) monsterAttackTimer.stop();
+        if (manaRegenTimer != null) manaRegenTimer.stop();
+        if (monsterUltimateTimer != null) monsterUltimateTimer.stop();
         System.exit(0);
     }
 
     // 隨機生成魔法卡
     private void generateMagicCards() {
-        String[] cardNames = {"血量最大值 +5", "攻擊力 +1", "防禦", "血量 +20"};
+        String[] cardNames = {"血量最大值 +5 (消耗10魔力)", "攻擊力 +1 (消耗10魔力)", "防禦 (消耗10魔力)", "血量 +20 (消耗10魔力)"};
         for (JButton button : magicCards) {
             String card = cardNames[new Random().nextInt(cardNames.length)];
             button.setText(card);
@@ -259,26 +270,21 @@ public class AnimatedGame {
         public void actionPerformed(ActionEvent e) {
             JButton source = (JButton) e.getSource();
             String card = source.getText();
-
+    
             if (heroMana >= 10) {
                 heroMana -= 10;
-                switch (card) {
-                    case "血量最大值 +5":
-                        heroMaxHealth += 5;
-                        break;
-                    case "攻擊力 +1":
-                        heroAttackPower += 1;
-                        break;
-                    case "防禦":
-                        isDefenseActive = true;
-                        SwingUtilities.invokeLater(() -> {
-                            heroLabel.setIcon(DEFPortrait); 
-                            moveHero(30); // 向前移動
-                        });
-                        break;
-                    case "血量 +20":
-                        heroHealth = Math.min(heroMaxHealth, heroHealth + 20);
-                        break;
+                if (card.contains("血量最大值 +5")) {
+                    heroMaxHealth += 5;
+                } else if (card.contains("攻擊力 +1")) {
+                    heroAttackPower += 1;
+                } else if (card.contains("防禦")) {
+                    isDefenseActive = true;
+                    SwingUtilities.invokeLater(() -> {
+                        heroLabel.setIcon(DEFPortrait);
+                        moveHero(30); // 向前移動
+                    });
+                } else if (card.contains("血量 +20")) {
+                    heroHealth = Math.min(heroMaxHealth, heroHealth + 20);
                 }
                 generateMagicCards();
                 updateLabels();
@@ -287,6 +293,7 @@ public class AnimatedGame {
             }
         }
     }
+    
 
     public static void main(String[] args) {
         new AnimatedGame();
